@@ -25,7 +25,7 @@ def get_times(y, fraction=0.4):
 
     return (np.min(y,axis=-1)*fraction - yl)/(yr-yl) + l
 
-def fft_filter(y, cutoff=300e6, sample_rate=2e9):
+def fft_filter(y, cutoff=500e6, sample_rate=2e9):
     """
     Filter the array `y` by removing frequency components above
     `cutoff` in Hz.
