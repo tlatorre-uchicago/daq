@@ -45,7 +45,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', dest='output', default='out.txt')
     parser.add_argument('filenames', nargs='+', help='input files')
-    parser.add_argument('-c', '--chunk', type=int, default=100000)
+    parser.add_argument('-c', '--chunk', type=int, default=10000)
     args = parser.parse_args()
 
     t = []
@@ -54,13 +54,13 @@ def main():
         with h5py.File(filename) as f:
             start = time.time()
             for i in range(0, f['c1'].shape[0], args.chunk):
-                y1 = f['c1'][i:i+args.chunk]
-                y2 = f['c2'][i:i+args.chunk]
-                mask = np.min(y2,axis=-1) < -1000
+                y1 = (f['c1'][i:i+args.chunk] - float(f['c1'].attrs['YOFF']))*float(f['c1'].attrs['YMULT'])
+                y2 = (f['c2'][i:i+args.chunk] - float(f['c2'].attrs['YOFF']))*float(f['c2'].attrs['YMULT'])
+                mask = np.min(y2,axis=-1) < -10e-3
                 dt = float(f['c1'].attrs['XINCR'])*1e9
                 y1 = fft_filter(y1[mask], dt)
                 y2 = fft_filter(y2[mask], dt)
-                t1 = get_times(-y1)*dt
+                t1 = get_times(y1)*dt
                 t2 = get_times(y2)*dt
                 t.extend(t2 - t1)
             stop = time.time()
