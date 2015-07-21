@@ -44,12 +44,12 @@ if __name__ == '__main__':
     import time
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-n', type=int)
+    parser.add_argument('-n', type=int, default=100)
     parser.add_argument('filename', help='output filename')
     parser.add_argument('-c', '--chunk', type=int, default=1000)
     args = parser.parse_args()
 
-    t = Scope('hollande.uchicago.edu')
+    t = Scope('pompidou.uchicago.edu')
     print 'connected to %s' % t.ask('*idn?').strip()
 
     # make sure the data is little endian
