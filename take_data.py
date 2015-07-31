@@ -85,7 +85,7 @@ if __name__ == '__main__':
         for channel in [1,2]:
             t.send('data:source CH%i' % channel)
             for k, v in [s.split(' ', 1) for s in t.ask('wfmoutpre?')[11:].split(';')]:
-                    f[name].attrs[k] = v
+                    f['c%i' % channel].attrs[k] = v
         t.send('header 0')
 
         start = time.time()
