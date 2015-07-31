@@ -73,9 +73,10 @@ if __name__ == '__main__':
 
         # turn headers on so the output of wfmpre? has headers
         t.send('header 1')
-        for k, v in [s.split(' ', 1) for s in t.ask('wfmoutpre?')[11:].split(';')]:
-            for name in f:
-                f[name].attrs[k] = v
+        for channel in [1,2]:
+            t.send('data:source CH%i' % channel)
+            for k, v in [s.split(' ', 1) for s in t.ask('wfmoutpre?')[11:].split(';')]:
+                    f[name].attrs[k] = v
         t.send('header 0')
 
         start = time.time()
