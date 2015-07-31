@@ -42,12 +42,21 @@ if __name__ == '__main__':
     import h5py
     import argparse
     import time
+    import signal
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', type=int, default=100)
     parser.add_argument('filename', help='output filename')
     parser.add_argument('-c', '--chunk', type=int, default=1000)
     args = parser.parse_args()
+
+    stop = False
+
+    def ctrlc_handler(signum, frame):
+        print 'ctrl-c caught. quitting...'
+        stop = True
+
+    signal.signal(signal.SIGINT, ctrlc_handler)
 
     t = Scope('pompidou.uchicago.edu')
     print 'connected to %s' % t.ask('*idn?').strip()
@@ -81,6 +90,8 @@ if __name__ == '__main__':
 
         start = time.time()
         for i in range(0,args.n,args.chunk):
+            if stop:
+                break
             rate = i/(time.time() - start)
             print '\r%i/%i %.2f Hz' % (i,args.n,rate),
             sys.stdout.flush()
